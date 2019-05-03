@@ -32,6 +32,9 @@ MED is a common problem as well which solved by dynamic programming approach, it
 ## Linear programming
 This is new section as well, as I'm currently studying it, however I hope I'll be able to add Matrices algorithms to the section such as Matrix multiplication and Gaussian Elimination, Finding inverse and much more. the section currently have a simple -untested- -unfinished- Simplex method algorithm to solve optimization problems of linear equations (matrix), currently works on simple scenarios and I'm hoping to further improve the implementation.
 
+### Guass Elimination - Matrix solver
+Currently W.I.P.
+
 ## Array Sorts
 Who doesn't like sorting algorithms? well, we are in luck as this section contains handful of algorithms with different implementations and even a performance test!
  - Note: Currently contains only the "utilities.java" files which buckled up all the algorithms and its kinda messy, the file is pretty old and I'm hoping in the near future I'll be able to further improve it and even publish a v3 performance test of sorting algorithms.

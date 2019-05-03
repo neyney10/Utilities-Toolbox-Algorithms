@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 
+import utilities.Print;
+
 public class Simplex {
 	
 	public static void addConstraint(String s) {
@@ -24,7 +26,9 @@ public class Simplex {
 		int pivot[];
 		while((pivot = findPivot(matrix)) != null) {
 				GaussEliminiation.SingleGaussElimination(matrix, 0, pivot[0]);
-				printMatrix(matrix);
+				
+				// TEMP FOR TESTING
+				Print.printMatrix(matrix);
 				System.out.println();
 				try {
 					Thread.sleep(50);
@@ -55,25 +59,11 @@ public class Simplex {
 		return position;
 	}
 	
+	private static void interchange(double matrix[][], int row, int column) // substituion.
+	{
+		// TODO: implement.
+	}
 	
-	/**
-     * https://stackoverflow.com/questions/5061912/printing-out-a-2-d-array-in-matrix-format
-     */
-    public static void printMatrix(double[][] m) {
-        try{
-            int rows = m.length;
-            int columns = m[0].length;
-            String str = "|\t";
-    
-            for(int i=0;i<rows;i++){
-                for(int j=0;j<columns;j++){
-                    str += m[i][j] + "\t";
-                }
-    
-                System.out.println(str + "|");
-                str = "|\t";
-            }
-    
-        }catch(Exception e){System.out.println("Matrix is empty!!");}
-    }
+	
+
 }

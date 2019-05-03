@@ -9,33 +9,42 @@ import algorithms.linearprogramming.Simplex;
 
 public class Main {
     public static void main(String[] args) {
-        String a = "Ofer.Vermillion";
-        String b = "Vermill";
+//        String a = "Ofer.Vermillion";
+//        String b = "Vermill";
+//
+//        LCS lcs = new LCS();
+//        int commonLength = lcs.compute(a, b); // should return 4
+//
+//        System.out.println("Common Length: "+commonLength);
+//        
+//        int minEditLength = MDE.compute(a, b);
+//        
+//        System.out.println("minEditLength: "+minEditLength);
+//        
+//        
+//        for (int i = 1; i < a.length(); i++) {
+//            String sub = a.substring(0,i);
+//            System.out.println(sub + ": "+getBestMatch(sub));
+//        }
 
-        LCS lcs = new LCS();
-        int commonLength = lcs.compute(a, b); // should return 4
-
-        System.out.println("Common Length: "+commonLength);
         
-        int minEditLength = MDE.compute(a, b);
-        
-        System.out.println("minEditLength: "+minEditLength);
-        
-        
-        for (int i = 1; i < a.length(); i++) {
-            String sub = a.substring(0,i);
-            System.out.println(sub + ": "+getBestMatch(sub));
-        }
-
-
+        // Linear programming example 1987 UG exam, result: 39.444 and (x1,x2)=(5.222,2.222)
         double m[][] = {
+                {1,1,1,0,0,0,10},
+                {1,-1,0,-1,0,0,3},
+                {5,4,0,0,1,0,35},
+                {-5,-6,0,0,0,1,0}
+            };
+        /*
+        double m[][] = { // result: 30
             {1,2,1,0,0,30},
             {0,1,0,1,0,5},
             {-1,-1,0,0,0,0}
         };
+        */
         
         /*
-         	double m[][] = {
+         	double m[][] = { // result: 180,000
                 {1,1,1,1,0,0,0,		600},
                 {1,3,0,0,1,0,0,		600},
                 {2,0,1,0,0,1,0,		900},
@@ -45,8 +54,6 @@ public class Main {
 
         printMatrix(m);
         System.out.println("Substracting...");
-        //GaussEliminiation.SingleGaussElimination(m,0,1);
-        //GaussEliminiation.substractRow(m, 1, 2, 1);
         Simplex.compute(m);
         printMatrix(m);
  
