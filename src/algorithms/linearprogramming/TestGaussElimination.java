@@ -29,18 +29,30 @@ class TestGaussElimination {
 				{4,2,1,3},
 				{0,4,0,4},
 		};
-		
+
+		double m4[][] = { // last column is vector 'b', the RIGHT HAND SIDE of the equations.
+				{3,1,0,2,3},
+				{1,0,1,-1,3},
+				{0,-2,0,1,0},
+				{1,0,-3,1,-5},
+				{2,0,-6,2,-10},
+				{-3,0,-3,3,-9}
+		};
+
 		double xsolutions[];
-		
+
 		xsolutions = GaussEliminiation.compute(m1);
 		assertArrayEquals(xsolutions, new double[] {0.666666,0.666666,-1.666666}, DELTA);
-		
+
 		xsolutions = GaussEliminiation.compute(m2);
 		assertArrayEquals(xsolutions, new double[] {1,0,2,0}, DELTA);
-		
+
 		xsolutions = GaussEliminiation.compute(m3); 
 		// TODO: INF solutions
 		//assertArrayEquals(xsolutions, new double[] {0.666666,0.666666,-1.666666}, DELTA);
+		
+		xsolutions = GaussEliminiation.compute(m4);
+		assertArrayEquals(xsolutions, new double[] {1,0,2,0}, DELTA);
 
 	}
 

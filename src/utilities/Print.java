@@ -22,7 +22,7 @@ public class Print {
     
             for(int i=0;i<rows;i++){
                 for(int j=0;j<columns;j++){
-                    str += m[i][j] + "\t";
+                    str += String.format("%.4f", m[i][j]) + "\t";
                 }
     
                 System.out.println(str + "|");

@@ -23,4 +23,16 @@ public class ElementaryRowOperations {
 	{
 		addRow(matrix,row1,row2, -multiplier);
 	}
+	
+	public static void multiplyRow(double matrix[][], int row1, double multiplier)
+	{
+		for (int i = 0; i < matrix[row1].length; i++)
+			matrix[row1][i] *= multiplier;
+	}
+	
+	public static void divideRow(double matrix[][], int row1, double division)
+	{
+		for (int i = 0; i < matrix[row1].length; i++)
+			matrix[row1][i] /= division;
+	}
 }

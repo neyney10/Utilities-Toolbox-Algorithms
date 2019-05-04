@@ -30,7 +30,17 @@ MED is a common problem as well which solved by dynamic programming approach, it
 
 
 ## Linear programming
-This is new section as well, as I'm currently studying it, however I hope I'll be able to add Matrices algorithms to the section such as Matrix multiplication and Gaussian Elimination, Finding inverse and much more. the section currently have a simple -untested- -unfinished- Simplex method algorithm to solve optimization problems of linear equations (matrix), currently works on simple scenarios and I'm hoping to further improve the implementation.
+This is new section as well, as I'm currently studying it, however I hope I'll be able to add Matrices algorithms to the section such as Matrix multiplication and Gaussian Elimination, Finding inverse and much more. the section currently have a simple Simplex method algorithm to solve optimization problems of linear equations (matrix), currently works on simple scenarios and I'm hoping to further improve the implementation.
+
+### Simplex
+( Currently W.I.P. ) solving matrix optimization problems.
+#### Features
+- Solve Simplex matrices (with auxiliary variables to convert from the form Ax<=b to By=b)
+- a friendly interface to add constraints and objective functions, construct a linear problem in general instead of a matrix :x:
+- Returns the solution vector, the values of the optimization variables x1,x2....xn. :x:
+- Stops on in-feasibility and on completion. :heavy_check_mark:
+- Throws exception on in-feasibility. :x:
+- Tests (Junit v5 for Java).				:heavy_check_mark:
 
 ### Gauss Elimination - Matrix solver
 ( Currently W.I.P. ) solving matrices using the Gauss Elimination algorithm.
@@ -39,9 +49,10 @@ This is new section as well, as I'm currently studying it, however I hope I'll b
 - Solve homogenous matrix. [Single solution only for now] :heavy_check_mark:
 - Solve non-homogenous matrix (with vector b, Ax=b).  [Single solution only for now] :heavy_check_mark:
 - Solve NxN matrix. [Single solution only for now] :heavy_check_mark:
-- Solve MxN matrix. :x:
+- Solve MxN matrix. [Single solution only for now] :heavy_check_mark:
 - Solve for Inf+ solutions. :x:
 - Solve matrix with parameters. :x:
+- Tests (Junit v5 for Java).				:heavy_check_mark:
 
 ## Array Sorts
 Who doesn't like sorting algorithms? well, we are in luck as this section contains handful of algorithms with different implementations and even a performance test!

@@ -5,10 +5,12 @@ import algorithms.dynamicprogramming.LCS;
 import algorithms.dynamicprogramming.MDE;
 import algorithms.linearprogramming.GaussEliminiation;
 import algorithms.linearprogramming.Simplex;
+import utilities.Print;
 
 
 public class Main {
     public static void main(String[] args) {
+    	
 //        String a = "Ofer.Vermillion";
 //        String b = "Vermill";
 //
@@ -28,15 +30,23 @@ public class Main {
 //        }
 
         
-        // Linear programming example 1987 UG exam, result: 39.444 and (x1,x2)=(5.222,2.222)
-        double m[][] = {
-                {1,1,1,0,0,0,10},
-                {1,-1,0,-1,0,0,3},
-                {5,4,0,0,1,0,35},
-                {-5,-6,0,0,0,1,0}
+        // Linear programming example 1987 UG exam, result: 39.444 and (x1,x2)=(5.222,2.222) http://people.brunel.ac.uk/~mastjjb/jeb/or/morelp.html
+        double m[][] = { // doesnt work for some reason.
+                {1,1,1,0,0,10},
+                {-1,1,0,1,0,-3},
+                {5,4,0,0,1,35},
+                {-5,-6,0,0,0,0}
             };
+    	
+    	
+//        double m[][] = { // result: 47/3 = 15.6667 // works
+//              {1,3,-1,6},
+//              {0,1,1,4},
+//              {3,1,0,7},
+//              {-5,-2,-1,0}
+//          };
         /*
-        double m[][] = { // result: 30
+        double m[][] = { // result: 30 // works
             {1,2,1,0,0,30},
             {0,1,0,1,0,5},
             {-1,-1,0,0,0,0}
@@ -44,7 +54,7 @@ public class Main {
         */
         
         /*
-         	double m[][] = { // result: 180,000
+         	double m[][] = { // result: 180,000 // works
                 {1,1,1,1,0,0,0,		600},
                 {1,3,0,0,1,0,0,		600},
                 {2,0,1,0,0,1,0,		900},
@@ -52,10 +62,10 @@ public class Main {
             }; 
          */
 
-        printMatrix(m);
+        Print.printMatrix(m);
         System.out.println("Substracting...");
         Simplex.compute(m);
-        printMatrix(m);
+        Print.printMatrix(m);
  
         
         
@@ -96,27 +106,6 @@ public class Main {
         return match;
     }
 
-    /**
-     * https://stackoverflow.com/questions/5061912/printing-out-a-2-d-array-in-matrix-format
-     */
-    public static void printMatrix(double[][] m) {
-        try{
-            int rows = m.length;
-            int columns = m[0].length;
-            String str = "|\t";
-    
-            for(int i=0;i<rows;i++){
-                for(int j=0;j<columns;j++){
-                    str += m[i][j] + "\t";
-                }
-    
-                System.out.println(str + "|");
-                str = "|\t";
-            }
-    
-        }catch(Exception e){System.out.println("Matrix is empty!!");}
-    }
-    
     
     
     

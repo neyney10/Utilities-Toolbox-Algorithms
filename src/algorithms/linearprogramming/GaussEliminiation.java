@@ -1,29 +1,53 @@
 package algorithms.linearprogramming;
 
+import java.util.Arrays;
+
 import utilities.Print;
 
 
 public class GaussEliminiation {
 
 	public static void main(String[] args) { // TEMP ONLY , TODO: delete
-//		double matrix[][] = { // last column is vector 'b', the RIGHT HAND SIDE of the equations.
-//				{2,1,0,2},
-//				{4,3,1,3},
-//				{2,4,0,4},
-//		};
+		//		double matrix[][] = { // last column is vector 'b', the RIGHT HAND SIDE of the equations.
+		//				{2,1,0,2},
+		//				{4,3,1,3},
+		//				{2,4,0,4},
+		//		};
 
-//		double matrix[][] = { // last column is vector 'b', the RIGHT HAND SIDE of the equations.
-//				{3,1,0,2,3},
-//				{1,0,1,-1,3},
-//				{0,-2,0,1,0},
-//				{1,0,-3,1,-5}
-//		};
+		//		double matrix[][] = { // last column is vector 'b', the RIGHT HAND SIDE of the equations.
+		//				{3,1,0,2,3},
+		//				{1,0,1,-1,3},
+		//				{0,-2,0,1,0},
+		//				{1,0,-3,1,-5},
+		//				{2,0,-6,2,-10},
+		//				{-3,0,-3,3,-9}
+		//		};
 
-				double matrix[][] = { // last column is vector 'b', the RIGHT HAND SIDE of the equations.
-						{0,0,0,2},
-						{4,2,1,3},
-						{0,4,0,4},
-				};
+		//				double matrix[][] = { // last column is vector 'b', the RIGHT HAND SIDE of the equations.
+		//				{3,1,0,2,3},
+		//				{1,0,1,-1,3},
+		//				{0,-2,0,1,0},
+		//		};
+
+		double matrix[][] = { // last column is vector 'b', the RIGHT HAND SIDE of the equations.
+				{8 ,9 ,9 ,5 ,1 ,4 ,5 ,9 ,9},
+				{4 ,8 ,0 ,4 ,1 ,9 ,0 ,1 ,5},
+				{2 ,0 ,8 ,5 ,6 ,6 ,4 ,6 ,7},
+				{0 ,5 ,1 ,7 ,1 ,1 ,6 ,2 ,0},
+				{9 ,9 ,8 ,1 ,2 ,2 ,9 ,4 ,1},
+				{0 ,1 ,0 ,6 ,0 ,0 ,5 ,5 ,7},
+				{1 ,3 ,7 ,1 ,7 ,7 ,8 ,3 ,6},
+				{9 ,7 ,4 ,2 ,7 ,4 ,2 ,5 ,9},
+				{2 ,5 ,1 ,0 ,6 ,4 ,0 ,7 ,2}
+		};
+
+
+
+		//				double matrix[][] = { // last column is vector 'b', the RIGHT HAND SIDE of the equations.
+		//						{0,0,0,2},
+		//						{4,2,1,3},
+		//						{0,4,0,4},
+		//				};
 		//arrangeMatrix(matrix, 0);
 		System.out.println("rank: "+rankOfEchelonMatrix(matrix));
 
@@ -37,8 +61,6 @@ public class GaussEliminiation {
 		System.out.println();
 
 	}
-
-
 
 
 
@@ -60,35 +82,63 @@ public class GaussEliminiation {
 	public static double[] compute(double matrix[][])
 	{
 		//TODO: put zero-rows at the bottom.
-		for (int i = 0; i < matrix.length-1; i++) { // ROWS
+		for (int i = 0; i < matrix.length; i++) { // ROWS
 			//Arrange matrix
 			arrangeMatrix(matrix, i);
 			// find leading coefficient.
 			int leadCoeffColumn = findLeadCoeffPosition(matrix, i);
 
 			if(leadCoeffColumn == -1) // if no leading coefficient found, its a zeroed-row
+			{
+				if (matrix[i][matrix[i].length-1] != 0) {
+					// CONTRADICTION 0=a, THERE ARE NO SOLUTIONS.
+					return noSolutions(matrix); // TODO: MAKE IT throw AN EXCEPTION
+				}
 				continue; // skip
-
+			}
 			SingleGaussElimination(matrix, i, leadCoeffColumn);
 		}
 
-		double x[] = new double[matrix[0].length-1]; // variables.
+		// Solutions for x1,x2...xn variables.
+		double x[]; // variables.
 
+		// Matrix's rank
 		int rank = rankOfEchelonMatrix(matrix);
-		if(rank < matrix[0].length-1) { // if not regular - inf+ solutions
-			// TODO: make function to generate a solution for this kind of scenario.
-			for (int r = x.length-1; r >= rank; r--) 
-				x[r] = Double.MAX_VALUE;
-		}
 
 		// find solutions, if any.
+		if(rank < matrix[0].length-1) // if not regular - inf+ solutions
+			x = infSolutions(matrix);
+		else  // Single solution
+			x = singleSolution(matrix);
 
+
+		return x;
+	}
+
+	private static double[] noSolutions(double matrix[][])
+	{ // TODO: MAKE IT throw AN EXCEPTION
+		double x[] = new double[matrix[0].length];
+		Arrays.fill(x, Double.POSITIVE_INFINITY);
+		return x;
+	}
+
+	private static double[] infSolutions(double matrix[][])
+	{// TODO: make function to generate a solution for this kind of scenario.
+		/*for (int r = x.length-1; r >= rank; r--) 
+			x[r] = Double.POSITIVE_INFINITY;*/
+
+		return new double[] {0}; // TEMP ONLY
+	}
+
+	private static double[] singleSolution(double matrix[][])
+	{
+		double x[] = new double[matrix[0].length-1];
 		for (int i = matrix.length-1; i >= 0; i--) { // ROWS,
-			// TODO: Currently assumes the matrix is size of NxN, make it support NxM. 
-
 			int leadCoeffColumn = findLeadCoeffPosition(matrix, i);
 			if(leadCoeffColumn == -1) // TODO: remove this line after using the rankCheck of echelon matrix
 				continue; 
+
+			x[leadCoeffColumn] = 0; // reset
 			for (int k = matrix[i].length-2; k > leadCoeffColumn; k--) {
 				x[leadCoeffColumn] += matrix[i][k]*x[k];
 			}
