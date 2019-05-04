@@ -22,17 +22,7 @@ public class Simplex {
 			MIN
 	}
 
-	public static void addConstraint(String s) {
-		// W.I.P
-		HashSet<String> table = new HashSet<>();
-		String[] symbols = s.split(" ");
-		for (String symb : symbols) {
-			table.add(symb);
-		}
-	}
-
 	/**
-	 * TEMP ONLY
 	 * @param matrix
 	 * @return
 	 */
@@ -96,6 +86,10 @@ public class Simplex {
 				return max_compute(matrix); //default
 		}
 		
+	}
+	
+	public static double compute(LPProblem lpp, opt mode) {
+		return compute(lpp.constructLP(), mode);
 	}
 
 

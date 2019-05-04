@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import utilities.Print;
+
 class TestSimplex {
 	
 	final double DELTA = 0.0001;
@@ -41,7 +43,7 @@ class TestSimplex {
 				{2,0,1,		900},
 				{-60,-90,-300,0}
 		}; 
-		
+
 		double opt;
 		opt = Simplex.compute(m1, Simplex.opt.MAX);
 		assertEquals(39.4444, opt, DELTA);

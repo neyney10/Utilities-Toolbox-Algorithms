@@ -38,6 +38,7 @@ This is new section as well, as I'm currently studying it, however I hope I'll b
 - Solve Simplex matrices.
 	- Maximum optimization problem :heavy_check_mark:
 	- Minimum optimization problem :heavy_check_mark: (need some code cleanup)
+	- Support equality constraints :x:
 - a friendly interface to add constraints and objective functions, construct a linear problem in general instead of a matrix :x:
 - Returns the solution vector, the values of the optimization variables x1,x2....xn. :x:
 - Stops on in-feasibility and on completion. :heavy_check_mark:
