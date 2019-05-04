@@ -1,30 +1,38 @@
 package algorithms.linearprogramming;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-
-
 
 import utilities.Print;
 
 /**
- * resource: https://www.math.ucla.edu/~tom/LP.pdf
+ * A class for solving Linear programming problems using the Simplex algorithm
+ * The simplex is an method for solving optimization problems, let it be maximum or minimum optimization
+ * problems, It is currently unknown if the running-time is polynomial, it's probably not.
+ * The performance of the method can be greatly enhanced by different types of pivot choosing.
+ * This class currently does not use any optimized or efficient way of choosing a pivot.
+ * Note: this class is a Static class and does not contain any methods beside static functions.
+ * RESOURCE: https://www.math.ucla.edu/~tom/LP.pdf
  * @author neyne
  *
  */
 public class Simplex {
 	
+	/**
+	 * opt enum defines which types of optimization the problem requests, Min or max.
+	 * @author neyne
+	 */
 	public enum opt {
 			MAX,
 			MIN
 	}
+	
+	private Simplex() {} // no use to construct a an instance of it.
 
 	/**
-	 * @param matrix
-	 * @return
+	 * Computing a minimum Linear programming problem with choosing a min-pivot 
+	 * and interchanging accordingly.
+	 * @param the Linear programming problem as the last row is equal to -(objective function) - double matrix[][] 
+	 * @return the minimum value found - double .
 	 */
 	public static double min_compute(double matrix[][]) {
 		int pivot[];
@@ -44,6 +52,13 @@ public class Simplex {
 		return matrix[matrix.length-1][matrix[0].length-1];
 	}
 
+	
+	/**
+	 * Computing a maximum Linear programming problem with choosing a max-pivot 
+	 * and interchanging accordingly.
+	 * @param matrix the Linear programming problem as the last row is equal to -(objective function). - double matrix[][] 
+	 * @return maximum value found - double.
+	 */
 	public static double max_compute(double matrix[][])
 	{
 		int pivot[];
@@ -71,9 +86,13 @@ public class Simplex {
 	}
 
 	/**
-	 * Notes: Additional column for Z (objective function) and additional row for 0=obj-z, 
+	 * Computing a maximum or minmimum Linear programming problem with choosing a max or min pivot choosing 
+	 * and interchanging accordingly.
+	 * @param matrix : the Linear programming problem as the last row is equal to -(objective function).
+	 * @param mode : enum opt - as the optimization type (minimum, maximum...)
+	 * @return (double) as the maximum value to the problem. 
+	 * Notes: and additional row for 0=obj-z (hence -obj), 
 	 * and another column for 'b' - the right hand side of the equations.
-	 * @param matrix
 	 */
 	public static double compute(double matrix[][], opt mode) {
 
@@ -88,13 +107,21 @@ public class Simplex {
 		
 	}
 	
+	/**
+	 * Computing a maximum or minmimum Linear programming problem with choosing a max or min pivot choosing 
+	 * and interchanging accordingly.
+	 * @param matrix : the Linear programming problem as the last row is equal to -(objective function).
+	 * @param mode : enum opt - as the optimization type (minimum, maximum...)
+	 * @return (double) as the maximum value to the problem. 
+	 * Notes: simply calling compute(lpp.constructLP(), mode).
+	 */
 	public static double compute(LPProblem lpp, opt mode) {
 		return compute(lpp.constructLP(), mode);
 	}
 
 
 	/**
-	 * Using the Simplex method to find the pivot
+	 * Using the Simplex method to find the pivot (max)
 	 * @param matrix - the Simplex matrix
 	 * @return int[2] of i,j position in the matrix of the pivot.
 	 */
@@ -147,9 +174,8 @@ public class Simplex {
 
 	/**
 	 * find pivot for the minimum optimization
-	 * Status: W.I.P
 	 * @param matrix
-	 * @return
+	 * @return int[2] of i,j position in the matrix of the pivot.
 	 */
 	private static int[] min_findPivot(double matrix[][]) {
 		// TODO: optimize / clean code / re-factor
@@ -242,9 +268,22 @@ public class Simplex {
 
 
 
+	/**
+	 * Apply pivot rules to the matrix and change it accordingly. 	<br>
+	 * Let i be the pivot's row, and j the pivot's column, then		<br>
+	 * every cell in the row 'i' is divided by the pivot's value.	<br>
+	 * Example: pivot = 5, the other cell value is 10, then the new value is 10/5 = 2.	<br>
+	 * M(i,k) where k!=j, M(i,k) /= Pivot.	<br>
+	 * Every cell in the column 'j' is divided by the -(pivot's value) (negative)	<br>
+	 * Hence M(k,j) where k!=i, M(k,j) /= -(Pivot).	<br>
+	 * Any other cell which is not in the row 'i' or the column 'j', is calculated:	<br>
+	 * M(k,v) where k,v!=i,j, M(k,v) -= [(M(i,v)*M(k,j))/Pivot]	<br>
+	 * @param matrix
+	 * @param row - pivot's row
+	 * @param column - pivot's column
+	 */
 	private static void interchange(double matrix[][], int row, int column) // substituion.
-	{// TODO: test for correctness.
-
+	{
 
 		// Get devision factor
 		double factor = matrix[row][column];
