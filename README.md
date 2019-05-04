@@ -35,7 +35,7 @@ This is new section as well, as I'm currently studying it, however I hope I'll b
 ### Simplex
 ( Currently W.I.P. ) solving matrix optimization problems.
 #### Features
-- Solve Simplex matrices (with auxiliary variables to convert from the form Ax<=b to By=b)
+- Solve Simplex matrices (with auxiliary variables to convert from the form Ax<=b to By=b) :heavy_check_mark:
 - a friendly interface to add constraints and objective functions, construct a linear problem in general instead of a matrix :x:
 - Returns the solution vector, the values of the optimization variables x1,x2....xn. :x:
 - Stops on in-feasibility and on completion. :heavy_check_mark:
@@ -57,7 +57,7 @@ This is new section as well, as I'm currently studying it, however I hope I'll b
 ## Array Sorts
 Who doesn't like sorting algorithms? well, we are in luck as this section contains handful of algorithms with different implementations and even a performance test!
  - Note: Currently contains only the "utilities.java" files which buckled up all the algorithms and its kinda messy, the file is pretty old and I'm hoping in the near future I'll be able to further improve it and even publish a v3 performance test of sorting algorithms.
- - 
+ 
 ### Algorithms
 #### Linear Search
 SImple linear search.
@@ -89,7 +89,7 @@ This sort is pretty fast for small arrays, in fact, most advanced algorithms use
 #### Quick sort (Hoare + Lomotu versions available)
 - Worst running-time complexity: O(n^2) although the average time is O(n*log(n)) and it can be further improved by randomly choosing a pivot element as trying to eliminate some Edge-case scenarios that bring it to higher complexity.
 - Not Stable!
-- 
+
 #### Bucket sort
 
 #### Radix Sort
