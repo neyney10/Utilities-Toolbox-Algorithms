@@ -10,7 +10,7 @@ import java.util.HashSet;
  */
  public class Equation {
 
-	private enum eqSign { //equation sign
+	public enum eqSign { //equation sign
 		EQ,
 		GEQ,
 		LEQ

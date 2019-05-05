@@ -2,6 +2,7 @@ package algorithms.linearprogramming;
 
 import java.util.Arrays;
 
+import algorithms.linearprogramming.LPProblem.opt;
 import utilities.Print;
 
 /**
@@ -17,17 +18,21 @@ import utilities.Print;
  */
 public class Simplex {
 	
+		private Simplex() {} // no use to construct a an instance of it.
+
+	
 	/**
-	 * opt enum defines which types of optimization the problem requests, Min or max.
-	 * @author neyne
+	 * Computing a maximum or minmimum Linear programming problem with choosing a max or min pivot choosing 
+	 * and interchanging accordingly.
+	 * @param matrix : the Linear programming problem as the last row is equal to -(objective function).
+	 * @param mode : enum opt - as the optimization type (minimum, maximum...)
+	 * @return (double) as the maximum value to the problem. 
+	 * Note: simply calling compute(lpp.constructLP(), lpp.getOptimizationType()).
 	 */
-	public enum opt {
-			MAX,
-			MIN
+	public static double compute(LPProblem lpp) {
+		return compute(constructLP(lpp), lpp.getOptimizationType());
 	}
 	
-	private Simplex() {} // no use to construct a an instance of it.
-
 	/**
 	 * Computing a minimum Linear programming problem with choosing a min-pivot 
 	 * and interchanging accordingly.
@@ -94,7 +99,7 @@ public class Simplex {
 	 * Notes: and additional row for 0=obj-z (hence -obj), 
 	 * and another column for 'b' - the right hand side of the equations.
 	 */
-	public static double compute(double matrix[][], opt mode) {
+	private static double compute(double matrix[][], opt mode) {
 
 		switch (mode) {
 			case MAX:
@@ -107,16 +112,45 @@ public class Simplex {
 		
 	}
 	
+	
 	/**
-	 * Computing a maximum or minmimum Linear programming problem with choosing a max or min pivot choosing 
-	 * and interchanging accordingly.
-	 * @param matrix : the Linear programming problem as the last row is equal to -(objective function).
-	 * @param mode : enum opt - as the optimization type (minimum, maximum...)
-	 * @return (double) as the maximum value to the problem. 
-	 * Notes: simply calling compute(lpp.constructLP(), mode).
+	 * Construct a linear programming matrix used for algorithms such as Simplex.
+	 * Note: there are many ways to construct an LP matrix, this function currently use the
+	 * matrix used in the resource: https://www.math.ucla.edu/~tom/LP.pdf
+	 * @return LP matrix (each cell is double)
 	 */
-	public static double compute(LPProblem lpp, opt mode) {
-		return compute(lpp.constructLP(), mode);
+	private static double[][] constructLP(LPProblem lpp) {
+		
+		LPProblem.opt optimizationType = lpp.getOptimizationType();
+		Equation objective 	   		   = lpp.getObjective(); 
+		Equation constraints[] 		   = lpp.getConstraints();
+		
+		double matrix[][] = new double[constraints.length+1][objective.getVariables().length+1];
+		
+		for (int i = 0; i < matrix.length-1; i++) {
+			Equation cons = constraints[i];
+			matrix[i] = Arrays.copyOf(cons.getVariables(), objective.getVariables().length+1);
+			matrix[i][matrix[i].length-1] =  cons.getB();
+			
+			if(optimizationType == LPProblem.opt.MAX && cons.getSign() == Equation.eqSign.GEQ
+					|| optimizationType == LPProblem.opt.MAX && cons.getSign() == Equation.eqSign.GEQ) {
+				// if not fit to a standard maximum problem where all inequalities are "<=", hence this one
+				// is ">=" or if not fit to a standard minimum problem where all inequalities are ">=", hence this one
+				// is "<=".
+				
+				ElementaryRowOperations.multiplyRow(matrix, i, -1);
+			} 
+		}
+		
+		// get all variables. TODO: make it support independent variables even those that are not 
+		// in the objective function.
+		double variables[] = objective.getVariables();
+
+		// set the last row to be the (0 = z-obj), hence -obj.
+		matrix[matrix.length-1] = Arrays.copyOf(variables, variables.length+1);
+		ElementaryRowOperations.multiplyRow(matrix, matrix.length-1, -1);
+		
+		return matrix;
 	}
 
 

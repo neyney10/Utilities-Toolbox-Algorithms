@@ -9,30 +9,34 @@ import java.util.Arrays;
  *
  */
 public class LPProblem {
-	private Equation objective;
-	private ArrayList<Equation> constraints;
-
-	public LPProblem() {
-		constraints = new ArrayList<>();
+	
+	/**
+	 * opt enum defines which types of optimization the problem requests, Min or max.
+	 * @author neyne
+	 */
+	public enum opt {
+		MAX,
+		MIN
 	}
 	
-	public double[][] constructLP() {
-		double matrix[][] = new double[constraints.size()+1][objective.getVariables().length+1];
-		
-		//matrix[0] =  new double[] {2,3,4,5}; //new double[objective.getVariables().length+1];
-		for (int i = 0; i < matrix.length-1; i++) {
-			Equation cons = constraints.get(i);
-			matrix[i] = Arrays.copyOf(cons.getVariables(), objective.getVariables().length+1);
-			matrix[i][matrix[i].length-1] =  cons.getB();
-		}
-		
-		double var[] = objective.getVariables();
-		for (int i = 0; i < matrix[matrix.length-1].length-1; i++) {
-			matrix[matrix.length-1][i] = -var[i];
-		}
-		
-		return matrix;
+	// The objective function equation, TODO: change it to a sub-class of equation called ObjectiveFunction
+	private Equation objective;
+	
+	// list of constraints 
+	private ArrayList<Equation> constraints;
+
+	// Optimization problem type
+	private opt optimization; 
+	
+	/**
+	 * Constructor
+	 */
+	public LPProblem() {
+		constraints = new ArrayList<>();
+		optimization = opt.MAX;
 	}
+	
+	
 	
 	public void setObjective(Equation objEquation) {
 		objective = objEquation;
@@ -47,7 +51,15 @@ public class LPProblem {
 	}
 	
 	public Equation[] getConstraints() {
-		return (Equation[]) constraints.toArray();
+		return  constraints.toArray(new Equation[constraints.size()]);
+	}
+	
+	public void setOptimizationType(opt o) {
+		optimization = o;
+	}
+	
+	public opt getOptimizationType() {
+		return optimization;
 	}
 	
 	@Override

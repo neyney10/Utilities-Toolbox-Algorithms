@@ -12,7 +12,7 @@ import utilities.Print;
 public class Main {
 	public static void main(String[] args) {
 
-		Equation e1 = new Equation("+ x - y <= 10");
+		Equation e1 = new Equation("+ x + y <= 10");
 		System.out.println(e1);
 		Equation e2 = new Equation("- x + y <= -3");
 		System.out.println(e2);
@@ -26,9 +26,11 @@ public class Main {
 		lpp.addConstraint(e2);
 		lpp.addConstraint(e3);
 		
+		lpp.setOptimizationType(LPProblem.opt.MAX);
 		lpp.setObjective(e4);
 		
-		Simplex.compute(lpp, Simplex.opt.MAX);
+		
+		Simplex.compute(lpp);
 		System.out.println(lpp);
 		
 //		double m2[][] = { // result: 0// works
@@ -37,14 +39,6 @@ public class Main {
 //				{-1,0,1,2,1}, // equality
 //				{0,-5,-1,-4,0}
 //		}; 
-//
-//
-//		Print.printMatrix(m2);
-//		System.out.println("Substracting...");
-//		Simplex.max_compute(m2);
-//		//Print.printArray(GaussEliminiation.compute(m2));
-//		System.out.println();
-//		Print.printMatrix(m2);
 
 
 
