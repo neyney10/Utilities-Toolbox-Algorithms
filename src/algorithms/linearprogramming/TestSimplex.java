@@ -45,6 +45,31 @@ class TestSimplex {
 
 	}
 
+	@Test
+	void testSimplexComputeWithEqualities() {
+		// with "="
+		double opt;
+		opt = Simplex.compute(getEqualityProblem1());
+		assertEquals(4.5, opt, DELTA);
+	}
+	
+	@Test
+	void testSimplexComputeCycle( ) {
+		// avoid computation cycles
+	}
+	
+	@Test
+	void testSimplexComputeUnrestrained( ) {
+		// unrestrained variables
+	}
+
+	@Test
+	void testSimplexComputeGeneral( ) {
+		// unrestrained variables and all kinds of equations.
+	}
+
+
+
 	private LPProblem getMaxProblem1()
 	{
 		// Linear programming example 1987 UG exam, result: 39.444 and (x1,x2)=(5.222,2.222) http://people.brunel.ac.uk/~mastjjb/jeb/or/morelp.html
@@ -54,7 +79,7 @@ class TestSimplex {
 				{5,4,35},
 				{-5,-6,0}
 		}; */
-		
+
 		LPProblem lpp1 = new LPProblem();
 
 		lpp1.setOptimizationType(LPProblem.opt.MAX);
@@ -69,7 +94,7 @@ class TestSimplex {
 
 	private LPProblem getMaxProblem2()
 	{
-		
+
 		/*		double m2[][] = { // result: 47/3 = 15.6667 // works
 				{1,3,-1,6},
 				{0,1,1,4},
@@ -77,7 +102,7 @@ class TestSimplex {
 				{-5,-2,-1,0}
 		};
 		 */
-	
+
 
 		LPProblem lpp = new LPProblem();
 
@@ -90,33 +115,33 @@ class TestSimplex {
 
 		return lpp;
 	}
-	
+
 	private LPProblem getMaxProblem3()
 	{
-		
+
 		/*		double m3[][] = { // result: 30 // works
 				{1,2,30},
 				{0,1,5},
 				{-1,-1,0}
 		};
 		 */
-	
+
 
 		LPProblem lpp = new LPProblem();
 
 		lpp.setOptimizationType(LPProblem.opt.MAX);
 		lpp.setObjective(new Equation("+ x + y = 0"));
 
-		lpp.addConstraint(new Equation("+ 1 + 2y <= 30"));
+		lpp.addConstraint(new Equation("+ 1x + 2y <= 30"));
 		lpp.addConstraint(new Equation("+ 0x + y <= 5"));
-		
+
 
 		return lpp;
 	}
-	
+
 	private LPProblem getMaxProblem4()
 	{
-		
+
 		/*		
 		double m4[][] = { // result: 180,000 // works
 				{1,1,1,		600},
@@ -125,7 +150,7 @@ class TestSimplex {
 				{-60,-90,-300,0}
 		}; 
 		 */
-	
+
 
 		LPProblem lpp = new LPProblem();
 
@@ -138,10 +163,10 @@ class TestSimplex {
 
 		return lpp;
 	}
-	
+
 	private LPProblem getMinProblem1()
 	{
-		
+
 		/*		
 		// min -x1-2x2-3x3
 		double m1[][] = { // result: -0.5// works
@@ -151,7 +176,7 @@ class TestSimplex {
 				{1,2,3,0}
 		}; 
 		 */
-	
+
 
 		LPProblem lpp = new LPProblem();
 
@@ -164,10 +189,10 @@ class TestSimplex {
 
 		return lpp;
 	}
-	
+
 	private LPProblem getMinProblem2()
 	{
-		
+
 		/*		
 		// min 3x1 - x2 +2x3
 		double m2[][] = { // result: 0// works
@@ -177,7 +202,7 @@ class TestSimplex {
 				{-3,1,-2,0}
 		}; 
 		 */
-	
+
 
 		LPProblem lpp = new LPProblem();
 
@@ -190,6 +215,27 @@ class TestSimplex {
 
 		return lpp;
 	}
-	
+
+	private LPProblem getEqualityProblem1() {
+		
+//		double m2[][] = { // 
+//				{-1,5,2,5,5},
+//				{0,3,0,1,2}, // equality
+//				{-1,0,1,2,1}, // equality
+//				{0,-5,-1,-4,0}
+//		}; 
+		
+		LPProblem lppe = new LPProblem();
+
+		lppe.setOptimizationType(LPProblem.opt.MAX); //solution = 4.5, 6 IF z is unrestricted
+		lppe.setObjective(new Equation("+ 0x + 5y + z + 4w = 0"));
+
+		lppe.addConstraint(new Equation("- x + 5y + 2z + 5w <= 5"));
+		lppe.addConstraint(new Equation("+ 0x + 3y + 0z + w = 2"));
+		lppe.addConstraint(new Equation("- 1x + 0y + 1z + 2w = 1"));
+
+		return lppe;
+	}
+
 
 }

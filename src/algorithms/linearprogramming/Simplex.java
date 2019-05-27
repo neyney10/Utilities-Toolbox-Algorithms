@@ -1,6 +1,8 @@
 package algorithms.linearprogramming;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 import algorithms.linearprogramming.LPProblem.opt;
 import utilities.Print;
@@ -17,10 +19,10 @@ import utilities.Print;
  *
  */
 public class Simplex {
-	
-		private Simplex() {} // no use to construct a an instance of it.
 
-	
+	protected Simplex() {} // no use to construct a an instance of it.
+
+
 	/**
 	 * Computing a maximum or minmimum Linear programming problem with choosing a max or min pivot choosing 
 	 * and interchanging accordingly.
@@ -32,7 +34,7 @@ public class Simplex {
 	public static double compute(LPProblem lpp) {
 		return compute(constructLP(lpp), lpp.getOptimizationType());
 	}
-	
+
 	/**
 	 * Computing a minimum Linear programming problem with choosing a min-pivot 
 	 * and interchanging accordingly.
@@ -57,7 +59,7 @@ public class Simplex {
 		return matrix[matrix.length-1][matrix[0].length-1];
 	}
 
-	
+
 	/**
 	 * Computing a maximum Linear programming problem with choosing a max-pivot 
 	 * and interchanging accordingly.
@@ -99,49 +101,49 @@ public class Simplex {
 	 * Notes: and additional row for 0=obj-z (hence -obj), 
 	 * and another column for 'b' - the right hand side of the equations.
 	 */
-	private static double compute(double matrix[][], opt mode) {
+	protected static double compute(double matrix[][], opt mode) {
 
 		switch (mode) {
-			case MAX:
-				return max_compute(matrix);
-			case MIN:
-				return min_compute(matrix);
-			default:
-				return max_compute(matrix); //default
+		case MAX:
+			return max_compute(matrix);
+		case MIN:
+			return min_compute(matrix);
+		default:
+			return max_compute(matrix); //default
 		}
-		
+
 	}
-	
-	
+
+
 	/**
 	 * Construct a linear programming matrix used for algorithms such as Simplex.
 	 * Note: there are many ways to construct an LP matrix, this function currently use the
 	 * matrix used in the resource: https://www.math.ucla.edu/~tom/LP.pdf
 	 * @return LP matrix (each cell is double)
 	 */
-	private static double[][] constructLP(LPProblem lpp) {
-		
+	protected static double[][] constructLP(LPProblem lpp) {
+
 		LPProblem.opt optimizationType = lpp.getOptimizationType();
 		Equation objective 	   		   = lpp.getObjective(); 
 		Equation constraints[] 		   = lpp.getConstraints();
-		
+
 		double matrix[][] = new double[constraints.length+1][objective.getVariables().length+1];
-		
+
 		for (int i = 0; i < matrix.length-1; i++) {
 			Equation cons = constraints[i];
 			matrix[i] = Arrays.copyOf(cons.getVariables(), objective.getVariables().length+1);
 			matrix[i][matrix[i].length-1] =  cons.getB();
-			
+
 			if(optimizationType == LPProblem.opt.MAX && cons.getSign() == Equation.eqSign.GEQ
 					|| optimizationType == LPProblem.opt.MAX && cons.getSign() == Equation.eqSign.GEQ) {
 				// if not fit to a standard maximum problem where all inequalities are "<=", hence this one
 				// is ">=" or if not fit to a standard minimum problem where all inequalities are ">=", hence this one
 				// is "<=".
-				
+
 				ElementaryRowOperations.multiplyRow(matrix, i, -1);
 			} 
 		}
-		
+
 		// get all variables. TODO: make it support independent variables even those that are not 
 		// in the objective function.
 		double variables[] = objective.getVariables();
@@ -150,7 +152,74 @@ public class Simplex {
 		matrix[matrix.length-1] = Arrays.copyOf(variables, variables.length+1);
 		ElementaryRowOperations.multiplyRow(matrix, matrix.length-1, -1);
 		
+		
+		Print.printMatrix(matrix);
+		System.out.println();
+		
+		// pivot equalities first and remove their rows and columns.
+		int k = 0; // when row and column are removed, the for loop gets shorter.
+		for (int i = 0; i < constraints.length; i++) {
+			Equation cons = constraints[i];
+			
+			if(cons.getSign() == Equation.eqSign.EQ) {
+				
+				// find new pivot which isnt zero m[i][j] != 0; 
+				// Note: have problems, please fix. does not return correct values, maybe because of interchange?
+				for (int j = 0; j < variables.length-k; j++) {
+					if(matrix[i-k][j] != 0) {
+						interchange(matrix, i-k, j); 
+						matrix = removeRowColumn(matrix, i-k, j);
+						
+						System.out.println((i-k) + " , " +(j));
+						Print.printMatrix(matrix);
+						System.out.println();
+						
+						k++;
+						
+				
+						
+						break;
+					}
+				}
+			}
+			
+		}
+	
+		Print.printMatrix(matrix);
 		return matrix;
+	}
+	
+	protected static double[][] removeRowColumn(double[][] matrix, int Irow, int Icolumn) {
+		// get new size
+		int newRowsAmount = matrix.length-1;
+		int newColumnAmount = matrix[0].length-1;
+		
+		// create new matrix.
+		double[][] newMatrix = new double[newRowsAmount][newColumnAmount];
+		
+		
+		int Inew = 0; 	//index of the new matrix
+		int Jnew = 0; //index of new matrix
+		// copy the values of the matrix
+		for (int i = 0; i < matrix.length; i++) {
+			if(i == Irow) 
+				continue; 
+				
+			Jnew = 0;
+			for (int j = 0; j < matrix[i].length; j++) {
+				if(j == Icolumn) 
+					continue;
+				
+				newMatrix[Inew][Jnew] = matrix[i][j];
+				Jnew++;
+			}
+			
+			Inew++;
+		}
+		
+		// return the new matrix without the row and column
+		return newMatrix;
+		
 	}
 
 
@@ -159,11 +228,11 @@ public class Simplex {
 	 * @param matrix - the Simplex matrix
 	 * @return int[2] of i,j position in the matrix of the pivot.
 	 */
-	private static int[] findPivot(double matrix[][]) {
+	protected static int[] findPivot(double matrix[][]) {
 		int rows = matrix.length;		// amount of rows.
 		int cols = matrix[0].length; 	// amount of columns
 
-		boolean feasible; 				// if feasibile
+		boolean feasible; 				// if feasible
 		double minRatio = Double.MAX_VALUE; // reset min
 		int position[] = new int[2];
 
@@ -178,8 +247,8 @@ public class Simplex {
 					double cellValue = matrix[i][j];
 					double ratio = matrix[i][cols-1]/cellValue;
 
-					if(cellValue > 0 && matrix[i][cols-1] >=0  // Case 1: if 'b' at row i is non-negative.
-							|| cellValue < 0 && matrix[i][cols-1] < 0) { // Case 2: if 'b' at row i is negative.
+					if(cellValue > 0 && matrix[i][cols-1] >=0  // Case 1: if 'b' at row i is non-negative. (page 23 mid) 
+							|| cellValue < 0 && matrix[i][cols-1] < 0) { // Case 2: if 'b' at row i is negative. (page 24 bot)
 
 						feasible = true;
 
@@ -211,7 +280,7 @@ public class Simplex {
 	 * @param matrix
 	 * @return int[2] of i,j position in the matrix of the pivot.
 	 */
-	private static int[] min_findPivot(double matrix[][]) {
+	protected static int[] min_findPivot(double matrix[][]) {
 		// TODO: optimize / clean code / re-factor
 		int rows = matrix.length;		// amount of rows.
 		int cols = matrix[0].length; 	// amount of columns
@@ -316,7 +385,7 @@ public class Simplex {
 	 * @param row - pivot's row
 	 * @param column - pivot's column
 	 */
-	private static void interchange(double matrix[][], int row, int column) // substituion.
+	protected static void interchange(double matrix[][], int row, int column) // substituion.
 	{
 
 		// Get devision factor
@@ -360,6 +429,13 @@ public class Simplex {
 
 	}
 
+
+	private class LP2Matrix {
+
+		public LP2Matrix(LPProblem lpp) {
+
+		}
+	}
 
 
 }

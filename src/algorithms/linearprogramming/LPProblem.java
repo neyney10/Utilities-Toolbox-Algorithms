@@ -27,6 +27,7 @@ public class LPProblem {
 
 	// Optimization problem type
 	private opt optimization; 
+
 	
 	/**
 	 * Constructor
